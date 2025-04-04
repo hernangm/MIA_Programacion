@@ -23,30 +23,39 @@ Esto no se ha demostrdo pero funciona para todos los casos probados.
 
 La función debe llamarse collatz.
 '''
+# def collatz(n):
+#     cont = 0
+#     if (n <= 0):
+#         raise ValueError(f"El número n debe ser positivo ({n}).")
+#     if (n == 1):
+#         return 1, cont
+#     if (n%2 == 0):
+#         cont +=1
+#         return collatz(n//2), cont
+#     else:
+#         cont +=1
+#         return collatz(3*n+1), cont
+
 def collatz(n):
-    cont = 0
     if (n <= 0):
         raise ValueError(f"El número n debe ser positivo ({n}).")
     if (n == 1):
-        return 1, cont
+        return 0
     if (n%2 == 0):
-        cont +=1
-        return collatz(n//2), cont
+        return collatz(n//2) + 1
     else:
-        cont +=1
-        return collatz(3*n+1), cont
-
-
+        return collatz(3*n+1) + 1
+    
 try:
     collatz(0)
 except ValueError as e:
     print("Test Collatz 0 passed")
 
-if collatz(1) == (1,0):
+if collatz(1) == 0:
     print("Test Collatz 1 passed")
-if collatz(2) == (1,1):
+if collatz(2) == 1:
     print("Test Collatz 2 passed")
-if collatz(3) == (1,7):
+if collatz(3) == 7:
     print("Test Collatz 3 passed")
 
 '''
