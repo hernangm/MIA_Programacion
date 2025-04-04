@@ -10,7 +10,6 @@ Cada paquete trae cinco figuritas.
 import random
 import statistics
 import math
-import sys
 
 def printResult(repeticiones, estimacion, figus_total, unidad):
     print(f"{repeticiones} repeticiones de un experimento predicen que es necesario comprar {math.ceil(estimacion)} ({round(estimacion,2)}) {unidad} para poder llenar un album de {figus_total} figuritas.")
