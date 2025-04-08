@@ -121,14 +121,15 @@ def propagar(lista):
         i += 1
     return lista
 
-p1 = propagar([ 0, 0, 0,-1, 1, 0, 0, 0,-1, 0, 1, 0, 0])
-if p1 == [ 0, 0, 0,-1, 1, 1, 1, 1,-1, 1, 1, 1, 1]:
-    print("Test propagar 1 passed")
-else:
-    print(f"1:{p1}")
+if __name__ == '__main__':
+    p1 = propagar([ 0, 0, 0,-1, 1, 0, 0, 0,-1, 0, 1, 0, 0])
+    if p1 == [ 0, 0, 0,-1, 1, 1, 1, 1,-1, 1, 1, 1, 1]:
+        print("Test propagar 1 passed")
+    else:
+        print(f"1:{p1}")
 
-p2 = propagar([ 0, 0, 0, 1, 0, 0])
-if p2 == [ 1, 1, 1, 1, 1, 1]:
-    print("Test propagar 2 passed")
-else:
-    print(f"1:{p2}")
+    p2 = propagar([ 0, 0, 0, 1, 0, 0])
+    if p2 == [ 1, 1, 1, 1, 1, 1]:
+        print("Test propagar 2 passed")
+    else:
+        print(f"1:{p2}")
