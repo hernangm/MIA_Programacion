@@ -1,0 +1,16 @@
+Corrección de la entrega:
+
+Test 1 passed
+Test 2 passed
+Test Collatz 0 passed
+Test Collatz 1 passed
+Test Collatz 2 passed
+Test Collatz 3 passed
+Test contar_definiciones 1 passed
+Test cantidad_de_claves_letra 1 passed
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.006s
+
+OK
+
