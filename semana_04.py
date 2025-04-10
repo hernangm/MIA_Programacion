@@ -1,4 +1,6 @@
 import csv
+import statistics
+import math
 # long,lat,id_arbol,altura_tot,diametro,inclinacio,id_especie,nombre_com,nombre_cie,tipo_folla,espacio_ve,ubicacion,nombre_fam,nombre_gen,origen,coord_x,coord_y
 
 nombre_archivo = 'arbolado-en-espacios-verdes.csv'
@@ -26,12 +28,6 @@ def findFirst(l, predicate):
            return (e, l[e])
     return None
 
-def map(l, transform):
-    output=[]
-    for k in l:
-        output.append(transform(k, l[k]))
-    return output
-
 '''
 Ejercicio 1:
 Crear la función arboles_parque(nombre_archivo, nombre_parque) que dado el archivo 
@@ -43,9 +39,11 @@ def arboles_parque(_nombre_archivo, nombre_parque):
     with open(_nombre_archivo, newline='', encoding="utf8") as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
-            if (row["espacio_ve"] == nombre_parque):
+            if nombre_parque is None:
                 arboles[row["id_arbol"]] = row
-        return arboles
+            elif (row["espacio_ve"] == nombre_parque):
+                arboles[row["id_arbol"]] = row
+    return arboles
 
 
 '''
@@ -66,16 +64,90 @@ Indicar los n árboles más altos de ese parque n_mas_altos(nombre_parque, n)
 '''
 def n_mas_altos(nombre_parque, n):
     arboles = arboles_parque(nombre_archivo,nombre_parque)
-    data = map(arboles, lambda k, v: (k, v["altura_tot"]))
+    data = [(key, arboles[key]["altura_tot"]) for key in arboles]
     data.sort(key=lambda e: e[1], reverse=True)
     r = [arboles[e[0]] for e in data[0: n]]
     return r
 
 
+'''
+Ejercicio 4:
+Dado un parque y una especie, indicar la altura promedio de esa especie altura_promedio(nombre_parque, especie).
+'''
+def altura_promedio(nombre_parque, especie):
+    arboles = arboles_parque(nombre_archivo,nombre_parque)
+    arbolesFiltradoPorEspecie = [arboles[key] for key in arboles if arboles[key]["nombre_cie"] == especie]
+    data = [int(a["altura_tot"]) for a in arbolesFiltradoPorEspecie]
+    return statistics.mean(data)
+
+
+'''
+Ejercicio 5:
+Probar el código creado y definir las funciones extra necesarias para decidir:
+
+El/los parques con más cantidad de árboles.
+El/los parques con los árboles más altos en promedio.
+El/los parques con más variedad de especies.
+La especie que más ejemplares tiene en la ciudad.
+La razón entre especies exóticas y autóctonas.
+'''
+
+def getParquesMasForestados(arbolesPorParque):
+    tally = [(key, len(arbolesPorParque[key])) for key in arbolesPorParque]
+    if len(tally) == 0:
+        return None
+    tally.sort(key= lambda a: a[1], reverse=True)
+    max = tally[0][1]
+    return [e[0] for e in tally if e[1] >= max]
+
+
+def getParquesConArbolesMasAltosEnPromedio(arbolesPorParque):
+    tally = [(key, statistics.mean([int(a["altura_tot"]) for a in arbolesPorParque[key]])) for key in arbolesPorParque]
+    if len(tally) == 0:
+        return None
+    tally.sort(key= lambda a: a[1], reverse=True)
+    max = tally[0][1]
+    return [e[0] for e in tally if e[1] >= max]
+
+
+def getEspecieMasPopular(arboles):
+    arbolesPorEspecie = groupBy(arboles, lambda k, v: v["nombre_cie"])
+    tally =[(key, len(arbolesPorEspecie[key])) for key in arbolesPorEspecie]
+    if len(tally) == 0:
+        return None
+    tally.sort(key= lambda a: a[1], reverse=True)
+    return tally[0][0]
+
+def getRazonExoticosAutoctonos(arboles):
+    arbolesPorOrigen = groupBy(arboles, lambda k, v: v["origen"])
+    if len(arbolesPorOrigen) == 0:
+        return None
+    cant_exoticos = len(arbolesPorOrigen["Exótico"])
+    cant_autoctonos = len(arbolesPorOrigen["Nativo/Autóctono"])
+    if (cant_autoctonos == 0):
+        raise "Cantidad autoctonos es 0."
+    return  cant_exoticos / cant_autoctonos
+
+def informe():
+    arboles = arboles_parque(nombre_archivo,None)
+    arbolesPorParque = groupBy(arboles, lambda k, v: v["espacio_ve"] )
+    return {
+        "parquesMasForestados": getParquesMasForestados(arbolesPorParque),
+        "parquesConArbolesMasAltos": getParquesConArbolesMasAltosEnPromedio(arbolesPorParque),
+        "especieMasPopular": getEspecieMasPopular(arboles),
+        "razonExoticosAutoctonos": getRazonExoticosAutoctonos(arboles)
+    }
+
 if __name__ == '__main__':
     nombre_parque = 'CENTENARIO'
     #arboles = arboles_parque(nombre_archivo, nombre_parque)
     popular = arbol_mas_popular(nombre_parque)
-    print(f"El arbol mas popular es {popular}")
-    arbolesMasAltos = n_mas_altos(nombre_parque, 5)
-    print(f"Los arboles mas altos son {' ,'.join(a["id_arbol"] for a in arbolesMasAltos)}")
+    print(f"El árbol más popular en el parque '{nombre_parque}' es {popular}.")
+    n = 5
+    arbolesMasAltos = n_mas_altos(nombre_parque, n)
+    print(f"Los {n} árboles más altos en el parque '{nombre_parque}' son {' ,'.join(a["id_arbol"] for a in arbolesMasAltos)}.")
+    especie = 'Washingtonia filifera'
+    promedioAltura = altura_promedio(nombre_parque, especie)
+    print(f"La altura promedio de los árboles de la especie '{especie}' en el parque '{nombre_parque}' es {round(promedioAltura,2)}.")
+    _informe = informe()
+    print(_informe)
