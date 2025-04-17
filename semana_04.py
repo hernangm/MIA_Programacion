@@ -76,7 +76,7 @@ Indicar los n árboles más altos de ese parque n_mas_altos(nombre_parque, n)
 '''
 def n_mas_altos(nombre_parque, n):
     arboles = arboles_parque(nombre_archivo,nombre_parque)
-    data = [(key, arboles[key]["altura_tot"]) for key in arboles]
+    data = [(key, int(arboles[key]["altura_tot"])) for key in arboles]
     data.sort(key=lambda e: e[1], reverse=True)
     r = [arboles[e[0]] for e in data[0: n]]
     return r
@@ -162,11 +162,11 @@ if __name__ == '__main__':
     print(f"El árbol más popular en el parque '{nombre_parque}' es {popular}.")
     n = 5
     arbolesMasAltos = n_mas_altos(nombre_parque, n)
-    print(f"Los {n} árboles más altos en el parque '{nombre_parque}' son {' ,'.join(a["id_arbol"] for a in arbolesMasAltos)}.")
+    print(f"Los {n} árboles más altos en el parque '{nombre_parque}' son {', '.join(a["id_arbol"] for a in arbolesMasAltos)}.")
     especie = 'Washingtonia filifera'
     promedioAltura = altura_promedio(nombre_parque, especie)
     print(f"La altura promedio de los árboles de la especie '{especie}' en el parque '{nombre_parque}' es {round(promedioAltura,2)}.")
     _informe = informe()
     informe_str =f"# Reporte\n- {"El parque" if len(_informe["parquesMasForestados"]) <= 1 else "Los parques"} con más cantidad de árboles {"es" if len(_informe["parquesMasForestados"]) <= 1 else "son"}: **{" ".join(_informe["parquesMasForestados"])}**.\n- {"El parque" if len(_informe["parquesConArbolesMasAltos"]) <= 1 else "Los parques"} con los árboles más altos en promedio {"es" if len(_informe["parquesConArbolesMasAltos"]) <= 1 else "son"}: **{" ".join(_informe["parquesConArbolesMasAltos"])}**.\n- {"El" if len(_informe["parquesConMasVariedadEspecies"]) <= 1 else "Los"} parques con más variedad de especies {"es" if len(_informe["parquesConMasVariedadEspecies"]) <= 1 else "son"}: **{" ".join(_informe["parquesConMasVariedadEspecies"])}**.\n- {"La especie mas popular es" if len(_informe["especieMasPopular"]) <= 1 else "Las especies mas populares son"}: **{" ".join(_informe["especieMasPopular"])}**.\n- La razón entre especies exóticas y autóctonas: **{round(_informe["razonExoticosAutoctonos"],2)}**.\n\nCreado: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"
     print(_informe)
-    writeFile("informe_semana_04.md", informe_str)
+    # writeFile("informe_semana_04.md", informe_str)
