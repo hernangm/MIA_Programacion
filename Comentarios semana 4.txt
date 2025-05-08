@@ -1,0 +1,1 @@
+Tu entrega está muy bien. Pasó todos nuestros test, el informe no desprende un análisis por fuera de la implementación, pero los resultados son correctos.
